@@ -71,7 +71,9 @@ class NeuralNetwork:
         # Return error
         return (error**2).sum()
 
-    def learn(self, train, test, epochs, learning_rate):
+    def learn(self, train, test, output_class, **kwargs):
+        epochs = kwargs['epochs']
+        learning_rate = kwargs['learning_rate']
         self.init_weight()
         hit = 0
         # Train
@@ -86,7 +88,7 @@ class NeuralNetwork:
                 spaces = ' ' * (50 - len(hashes))
                 sys.stdout.write('\rEpoch #{}: [{}] {}% | error : {:f}'.format(e,hashes + spaces, int(round(percent*100)), err ))
                 sys.stdout.flush()
-            error.append(err)
+                error.append(err)
             error = np.average(error)
             print('\rEpoch #{}: [{}] {}% | error : {:f}'.format(e,'#'*50,100,error))
             
@@ -98,6 +100,7 @@ class NeuralNetwork:
             y_nn = list(o).index(np.max(o))
             if y_nn == test.iloc[t,-1]:
                 hit+=1
-            print('{:>2} :=: {} -> {} expected {}'.format(t,list(test.iloc[t,:-1]),y_nn,test.iloc[t,-1]))
+            print('{:>2} :=: {} -> {} expected {}'.format(t,list(test.iloc[t,:-1]),output_class[y_nn],output_class[test.iloc[t,-1]]))
         
         print('Accuracy : {}%'.format(hit/len(test)*100))
+        return hit/len(test)*100

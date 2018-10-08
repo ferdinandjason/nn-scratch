@@ -15,9 +15,5 @@ class Dataset:
         self.data = self.data.replace(to_replace)
         self.data = self.data.sample(frac=1).reset_index(drop=True)
 
-    def get_data(self,train):
-        n_train_data = int(self.data.shape[0]*train)
-        return self.data.iloc[:n_train_data] , self.data.iloc[n_train_data:]
-
     def debug(self):
         print(self.data.iloc[:,:-1])
