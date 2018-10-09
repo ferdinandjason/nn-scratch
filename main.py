@@ -25,7 +25,7 @@ if __name__ == '__main__':
         test = data.iloc[test_idx]
 
         print("#FOLD: ",kf)
-        score = nn.learn(train, test, output_real, epochs=100, learning_rate=0.1)
+        score = nn.learn(train, test, output_real, kf, epochs=100, learning_rate=0.1)
         acc.append(score)
 
         print()

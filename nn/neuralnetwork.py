@@ -71,12 +71,16 @@ class NeuralNetwork:
         # Return error
         return (error**2).sum()
 
-    def learn(self, train, test, output_class, **kwargs):
+    def learn(self, train, test, output_class, kf, **kwargs):
         epochs = kwargs['epochs']
         learning_rate = kwargs['learning_rate']
         self.init_weight()
         hit = 0
         # Train
+        
+        error_id = []
+        error_data = []
+        
         for e in range(epochs):
             error = []
             for t in range(len(train)):
@@ -91,8 +95,15 @@ class NeuralNetwork:
                 error.append(err)
             error = np.average(error)
             print('\rEpoch #{}: [{}] {}% | error : {:f}'.format(e,'#'*50,100,error))
-            
-            
+
+            error_id.append(e)
+            error_data.append(error)
+
+        error_id = np.array(error_id)
+        error_data = np.array(error_data)
+
+        new = pd.DataFrame({'err_id': error_id, 'error': error_data})
+        new.to_csv('error_fold' + str(kf) + '.csv')
 
         # Test
         for t in range(len(test)):
